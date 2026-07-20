@@ -1,7 +1,7 @@
 # Python & SQL Study Hours Tracker
 
 ## Overview
-This is a Command Line Interface (CLI) application built with Python and PostgreSQL. It allows users to track their daily study hours by logging the subject and duration of each session into a secure relational database.
+This is an application built with Python and PostgreSQL. It allows users to track their daily study hours by logging the subject and duration of each session into a secure relational database.
 
 ## Features
 - **Add a Session:** Dynamically log a study subject and the amount of time spent studying.
