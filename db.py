@@ -40,3 +40,57 @@ def create_table():
     conn.commit()
     cursor.close()
     conn.close()
+
+def get_study_time(period="all"):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    if period == "today":
+        query= "SELECT SUM(minutes) FROM study_sessions WHERE log_date = CURRENT_DATE"
+    elif period == "week":
+        query= "SELECT SUM(minutes) FROM study_sessions WHERE log_date >= CURRENT_DATE-7"
+    elif period == "month":
+        query= "SELECT SUM(minutes) FROM study_sessions WHERE log_date >= CURRENT_DATE-30"
+    else:
+        query= "SELECT SUM(minutes) FROM study_sessions"
+
+
+    cursor.execute(query)
+    result= cursor.fetchone()
+    cursor.close()
+    conn.close()
+    if result[0] is not None:
+        return result[0]
+    else:
+        return 0
+    
+def update_session(session_id, new_minutes):
+    conn= get_connection()
+    cursor=conn.cursor()
+
+    try:
+        cursor.execute("UPDATE study_sessions SET minutes = %s WHERE id = %s", (new_minutes, session_id))
+        conn.commit()
+        return True
+    except Exception as e:
+        print(f"Error updating session: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def delete_session(session_id):
+    pass
+    conn = get_connection()
+    cursor=conn.cursor()
+    try:
+        cursor.execute("DELETE FROM study_sessions WHERE id=%s",(session_id,))
+        conn.commit()
+        return True
+    except Exception as e:
+        print(f"Error deleting session: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+        
