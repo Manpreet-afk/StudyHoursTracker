@@ -1,15 +1,19 @@
 # Python & SQL Study Hours Tracker
 
 ## Overview
-This is an application built with Python and PostgreSQL. It allows users to track their daily study hours by logging the subject and duration of each session into a secure relational database.
+This is a web-application built with Python and PostgreSQL. It allows users to track their daily study progress by logging the subject and duration of each session into a secure relational database.
 
 ## Features
-- **Add a Session:** Dynamically log a study subject and the amount of time spent studying.
-- **View History:** Retrieve and display a formatted list of all past study sessions.
-- **Secure Architecture:** Uses `python-dotenv` to keep database credentials hidden and secure.
-- **Auto-Initialization:** Automatically creates the necessary database tables upon the first run.
+* **📈 Live Dashboard:** Instantly calculates all-time study hours and dynamically tracks your consecutive daily study streak (🔥).
+* **📊 Interactive Visualizations:** render color-coded horizontal bar charts that break down total time spent per subject.
+* **📋 Complete CRUD Functionality:** 
+  * **Create:** Log new subjects and study durations through a clean web form.
+  * **Read:** View a formatted, real-time log of all past study sessions.
+  * **Update:** Quickly correct or adjust the study duration of existing session IDs.
+  * **Delete:** Permanently remove incorrect or unwanted records directly from the interface.
+* **🗄️ Robust Backend:** Parameterized SQL queries ensure data integrity and prevent SQL injection using `psycopg2`.
 
 ## Tech Stack
-- **Backend:** Python 3
-- **Database:** PostgreSQL
-- **Driver:** psycopg2
+- Python
+- postgreSQl
+- streamlit
