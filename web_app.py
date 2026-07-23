@@ -4,7 +4,7 @@ from db import get_study_time, get_streak, add_session, get_all_sessions, get_su
 
 st.set_page_config(page_title="Study Tracker", page_icon="📚",layout="wide")
 st.title("📚 Study Hours Dashboard")
-st.write("Welcome to your personal AI & Data Engineering study tracker!")
+st.write("Welcome to your personal study tracker!")
 
 total_minutes = get_study_time("all")
 total_hours = round(total_minutes / 60, 2)
