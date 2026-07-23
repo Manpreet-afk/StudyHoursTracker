@@ -1,5 +1,6 @@
 import psycopg2
 import os
+import datetime
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -21,6 +22,25 @@ if __name__ == "__main__":
         test_conn.close()
     except Exception as e:
         print(f"Connection failed: {e}")
+
+def add_session(subject, minutes):
+    conn = get_connection()
+    cursor = conn.cursor()
+    today = datetime.date.today()
+    
+    try:
+        cursor.execute(
+            "INSERT INTO study_sessions (subject, minutes, log_date) VALUES (%s, %s, %s)",
+            (subject, minutes, today)
+        )
+        conn.commit()
+        return True
+    except Exception as e:
+        print(f"Error adding session: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
 
 
 def create_table():
@@ -93,4 +113,53 @@ def delete_session(session_id):
     finally:
         cursor.close()
         conn.close()
-        
+
+
+def get_streak():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT DISTINCT DATE(log_date) FROM study_sessions ORDER BY DATE(log_date) DESC")
+    dates = [row[0] for row in cursor.fetchall()]
+
+    cursor.close()
+    conn.close()
+
+    if not dates:
+        return 0
+
+    streak = 0
+    today = datetime.date.today()
+
+    if dates[0] != today and dates[0] != today - datetime.timedelta(days=1):
+        return 0
+
+    expected_date = dates[0]
+    for d in dates:
+        if d == expected_date:
+            streak += 1
+            expected_date -= datetime.timedelta(days=1)
+        else:
+            break
+            
+    return streak
+
+
+def get_all_sessions():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, log_date, subject, minutes FROM study_sessions ORDER BY log_date DESC, id DESC")
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return rows
+
+def get_subject_breakdown():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT subject, SUM(minutes) FROM study_sessions GROUP BY subject")
+    data = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    # Returns a dictionary like {"Python": 120, "SQL": 60}
+    return {row[0]: row[1] for row in data}
